@@ -83,7 +83,8 @@ namespace Ezy.Module.Selenium.OpenInMenu
                     var parent = new AutomationTestData()
                     {
                         StartTime = DateTime.Now,
-                        LinkOpenCount = 0
+                        LinkOpenCount = 0,
+                        Name = model.FileName
                     };
                     repo.AutomationTestDatas.Add(parent);
                     repo.SaveChanges();
@@ -106,9 +107,6 @@ namespace Ezy.Module.Selenium.OpenInMenu
                                     {
                                         chrome.SwitchTo().Window(chrome.WindowHandles[1]);
                                     }
-                                    chrome.Url = "https://pos.allianceitsc.com/#/config-company-bank-account-activity?tab=ui-ctrl-154";
-                                    chrome.Navigate();
-                                    Thread.Sleep(5000);
                                     var verify = SeleniumHelper.VerifyError(chrome, path, lastErrorCount);
                                     var sMessage = verify.Error;
                                     string openInTabResult = string.Empty;

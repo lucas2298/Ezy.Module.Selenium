@@ -23,6 +23,7 @@
           <Property Name="Log_UpdatedBy" Type="nvarchar" MaxLength="500" />
           <Property Name="IsExpanderError" Type="bit" Nullable="false" />
           <Property Name="IsLinkError" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <Association Name="FK_AutomationTestData_Id_ParentId">
           <End Role="AutomationTestData" Type="Self.AutomationTestData" Multiplicity="0..1" />
@@ -74,6 +75,7 @@
           <Property Name="IsLinkError" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AutomationTestData1" Relationship="AlliancePos_DevModel.FK_AutomationTestData_Id_ParentId" FromRole="AutomationTestData" ToRole="AutomationTestData1" />
           <NavigationProperty Name="AutomationTestData2" Relationship="AlliancePos_DevModel.FK_AutomationTestData_Id_ParentId" FromRole="AutomationTestData1" ToRole="AutomationTestData" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_AutomationTestData_Id_ParentId">
           <End Type="AlliancePos_DevModel.AutomationTestData" Role="AutomationTestData" Multiplicity="0..1" />
@@ -96,6 +98,7 @@
           <EntitySetMapping Name="AutomationTestDatas">
             <EntityTypeMapping TypeName="AlliancePos_DevModel.AutomationTestData">
               <MappingFragment StoreEntitySet="AutomationTestData">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsLinkError" ColumnName="IsLinkError" />
                 <ScalarProperty Name="IsExpanderError" ColumnName="IsExpanderError" />
                 <ScalarProperty Name="Log_UpdatedBy" ColumnName="Log_UpdatedBy" />

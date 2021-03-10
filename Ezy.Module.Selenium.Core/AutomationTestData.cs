@@ -34,6 +34,7 @@ namespace Ezy.Module.Selenium.Core
         public string Log_UpdatedBy { get; set; }
         public bool IsExpanderError { get; set; }
         public bool IsLinkError { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AutomationTestData> AutomationTestData1 { get; set; }

@@ -22,7 +22,6 @@ namespace Ezy.Module.Selenium.Demo
     public partial class MainWindow : Window
     {
         public ChromeDriver chrome;
-        public ISeleniumOption_Base setting;
         public OpenWebInMenu openInMenu;
         public MainWindow()
         {
@@ -31,9 +30,8 @@ namespace Ezy.Module.Selenium.Demo
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.StackPanel_Selenium_Data.DataContext = new SeleniumOpenInMenuOptionModel();
             this.openInMenu = new OpenWebInMenu();
-            setting = openInMenu.GetDefaultSetting();
+            this.StackPanel_Selenium_Data.DataContext = openInMenu.GetDefaultSetting();
         }
 
         private void btn_Login_Click(object sender, RoutedEventArgs e)
@@ -49,7 +47,6 @@ namespace Ezy.Module.Selenium.Demo
             string screenShotPath = dataContext.ScreenShotPath;
             string logPath = dataContext.LogPath;
             string server = dataContext.IsLive ? "Live" : "Local";
-            string contents = dataContext.FolderName + "\n";
             var sMessage = SeleniumHelper.Login(chrome, username, password, screenShotPath);
         }
 
@@ -61,8 +58,8 @@ namespace Ezy.Module.Selenium.Demo
         private void btn_SaveConfig_Click(object sender, RoutedEventArgs e)
         {
             var dataContext = this.StackPanel_Selenium_Data.DataContext as SeleniumOpenInMenuOptionModel;
-            var pathConfig = setting.ConfigPath;
-            File.WriteAllText(Path.Combine(pathConfig, $"Config_{DateTime.Now.ToString("ddmmyyyy hhmmss")}.txt"), JsonConvert.SerializeObject(dataContext));
+            var pathConfig = dataContext.ConfigPath;
+            File.WriteAllText(Path.Combine(pathConfig, $"{dataContext.FileName}_Config_{DateTime.Now.ToString("ddmmyyyy hhmmss")}.txt"), JsonConvert.SerializeObject(dataContext));
         }
 
         private void btn_UploadConfig_Click(object sender, RoutedEventArgs e)
@@ -72,8 +69,7 @@ namespace Ezy.Module.Selenium.Demo
             if (result == true)
             {
                 var config = File.ReadAllText(openFileDlg.FileName);
-                setting = JsonConvert.DeserializeObject<SeleniumOpenInMenuOptionModel>(config);
-                this.StackPanel_Selenium_Data.DataContext = setting;
+                this.StackPanel_Selenium_Data.DataContext = JsonConvert.DeserializeObject<SeleniumOpenInMenuOptionModel>(config);
             }
         }
     }

@@ -4,16 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82D47D70-EF9E-4AAD-B74E-F2B2F899E979}</ProjectGuid>
+    <ProjectGuid>{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ezy.Module.Selenium.Share</RootNamespace>
-    <AssemblyName>Ezy.Module.Selenium.Share</AssemblyName>
+    <RootNamespace>Ezy.Module.Selenium.Core</RootNamespace>
+    <AssemblyName>Ezy.Module.Selenium.Core</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,46 +40,64 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebDriver, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\OpenInFileUrlsModel.cs" />
-    <Compile Include="Models\SeleniumConfigModel.cs" />
-    <Compile Include="Models\SeleniumOpenInFileOptionModel.cs" />
-    <Compile Include="Models\SeleniumOpenInMenuOptionModel.cs" />
-    <Compile Include="Models\VerifyErrorModel.cs" />
+    <Compile Include="AlliancePos_DevDataContext.cs" />
+    <Compile Include="AutomationTestData.cs">
+      <DependentUpon>SeleniumModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeleniumHelper.cs" />
+    <Compile Include="SeleniumModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeleniumModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeleniumModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeleniumModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeleniumModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeleniumModel.edmx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <EntityDeploy Include="SeleniumModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SeleniumModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
     <None Include="packages.config" />
+    <None Include="SeleniumModel.edmx.diagram">
+      <DependentUpon>SeleniumModel.edmx</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ezy.Module.Selenium.Core\Ezy.Module.Selenium.Core.csproj">
-      <Project>{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}</Project>
-      <Name>Ezy.Module.Selenium.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ezy.Module.Selenium.Interface\Ezy.Module.Selenium.Interface.csproj">
-      <Project>{dfaad0af-1da5-472b-b270-fb83dcff4b3a}</Project>
-      <Name>Ezy.Module.Selenium.Interface</Name>
-    </ProjectReference>
+    <Content Include="SeleniumModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SeleniumModel.Context.cs</LastGenOutput>
+      <DependentUpon>SeleniumModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="SeleniumModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SeleniumModel.edmx</DependentUpon>
+      <LastGenOutput>SeleniumModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.89.0.4389.2300\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.89.0.4389.2300\build\Selenium.WebDriver.ChromeDriver.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.89.0.4389.2300\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.89.0.4389.2300\build\Selenium.WebDriver.ChromeDriver.targets'))" />
-  </Target>
 </Project>

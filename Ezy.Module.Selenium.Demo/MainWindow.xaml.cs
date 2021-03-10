@@ -43,7 +43,7 @@ namespace Ezy.Module.Selenium.Demo
             this.chrome.Manage().Window.Maximize();
             this.chrome.Url = TextBox_LoginUrl.Text;
             this.chrome.Navigate();
-            Thread.Sleep(5000);
+            Thread.Sleep(2000);
             string username = dataContext.Username;
             string password = dataContext.Password;
             string screenShotPath = dataContext.ScreenShotPath;

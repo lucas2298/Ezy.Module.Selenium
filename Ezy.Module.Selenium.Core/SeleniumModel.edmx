@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AlliancePos_DevModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AutomationTestData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="ParentId" Type="bigint" />
+          <Property Name="LinkOpenCount" Type="int" Nullable="false" />
+          <Property Name="ErrorLink" Type="nvarchar" MaxLength="500" />
+          <Property Name="Error" Type="nvarchar(max)" />
+          <Property Name="LocalImagePath" Type="nvarchar(max)" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="Log_CreatedDate" Type="datetime" />
+          <Property Name="Log_CreatedBy" Type="nvarchar" MaxLength="500" />
+          <Property Name="Log_UpdatedDate" Type="datetime" />
+          <Property Name="Log_UpdatedBy" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsExpanderError" Type="bit" Nullable="false" />
+          <Property Name="IsLinkError" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AutomationTestData_Id_ParentId">
+          <End Role="AutomationTestData" Type="Self.AutomationTestData" Multiplicity="0..1" />
+          <End Role="AutomationTestData1" Type="Self.AutomationTestData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AutomationTestData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AutomationTestData1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AlliancePos_DevModelStoreContainer">
+          <EntitySet Name="AutomationTestData" EntityType="Self.AutomationTestData" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AutomationTestData_Id_ParentId" Association="Self.FK_AutomationTestData_Id_ParentId">
+            <End Role="AutomationTestData" EntitySet="AutomationTestData" />
+            <End Role="AutomationTestData1" EntitySet="AutomationTestData" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AlliancePos_DevModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AlliancePos_DevEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="AutomationTestDatas" EntityType="AlliancePos_DevModel.AutomationTestData" />
+          <AssociationSet Name="FK_AutomationTestData_Id_ParentId" Association="AlliancePos_DevModel.FK_AutomationTestData_Id_ParentId">
+            <End Role="AutomationTestData" EntitySet="AutomationTestDatas" />
+            <End Role="AutomationTestData1" EntitySet="AutomationTestDatas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AutomationTestData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="ParentId" Type="Int64" />
+          <Property Name="LinkOpenCount" Type="Int32" Nullable="false" />
+          <Property Name="ErrorLink" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Error" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LocalImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="Log_CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Log_CreatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Log_UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Log_UpdatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsExpanderError" Type="Boolean" Nullable="false" />
+          <Property Name="IsLinkError" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AutomationTestData1" Relationship="AlliancePos_DevModel.FK_AutomationTestData_Id_ParentId" FromRole="AutomationTestData" ToRole="AutomationTestData1" />
+          <NavigationProperty Name="AutomationTestData2" Relationship="AlliancePos_DevModel.FK_AutomationTestData_Id_ParentId" FromRole="AutomationTestData1" ToRole="AutomationTestData" />
+        </EntityType>
+        <Association Name="FK_AutomationTestData_Id_ParentId">
+          <End Type="AlliancePos_DevModel.AutomationTestData" Role="AutomationTestData" Multiplicity="0..1" />
+          <End Type="AlliancePos_DevModel.AutomationTestData" Role="AutomationTestData1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AutomationTestData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AutomationTestData1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AlliancePos_DevModelStoreContainer" CdmEntityContainer="AlliancePos_DevEntities" >
+          <EntitySetMapping Name="AutomationTestDatas">
+            <EntityTypeMapping TypeName="AlliancePos_DevModel.AutomationTestData">
+              <MappingFragment StoreEntitySet="AutomationTestData">
+                <ScalarProperty Name="IsLinkError" ColumnName="IsLinkError" />
+                <ScalarProperty Name="IsExpanderError" ColumnName="IsExpanderError" />
+                <ScalarProperty Name="Log_UpdatedBy" ColumnName="Log_UpdatedBy" />
+                <ScalarProperty Name="Log_UpdatedDate" ColumnName="Log_UpdatedDate" />
+                <ScalarProperty Name="Log_CreatedBy" ColumnName="Log_CreatedBy" />
+                <ScalarProperty Name="Log_CreatedDate" ColumnName="Log_CreatedDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="LocalImagePath" ColumnName="LocalImagePath" />
+                <ScalarProperty Name="Error" ColumnName="Error" />
+                <ScalarProperty Name="ErrorLink" ColumnName="ErrorLink" />
+                <ScalarProperty Name="LinkOpenCount" ColumnName="LinkOpenCount" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

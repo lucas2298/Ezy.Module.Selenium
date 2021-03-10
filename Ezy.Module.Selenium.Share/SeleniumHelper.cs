@@ -1,8 +1,11 @@
 ﻿namespace Ezy.Module.Selenium.Share
 {
+    using Ezy.Module.Selenium.Core;
+    using Ezy.Module.Selenium.Share.Models;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Drawing;
     using System.IO;
@@ -11,7 +14,7 @@
 
     public static class SeleniumHelper
     {
-        public static string BackTracking(ChromeDriver chrome, int n, int MaxN, int optionOpenExpander, string ScreenShotPath, int amountOfExpander)
+        public static string BackTracking(ChromeDriver chrome, int n, int MaxN, int optionOpenExpander, string ScreenShotPath, int amountOfExpander, long parentId, AlliancePos_DevEntities repo)
         {
             string sMessage = "";
             try
@@ -30,18 +33,37 @@
                         {
                             element.Click();
                             Thread.Sleep(5000);
-                            sMessage = VerifyError(chrome, ScreenShotPath, lastErrorCount);
+                            var verify = VerifyError(chrome, ScreenShotPath, lastErrorCount);
+                            sMessage = verify.Error;
                             if (string.IsNullOrEmpty(sMessage))
                             {
                                 if (optionOpenExpander == 1)
                                 {
-                                    OpenAllExpander(chrome, ScreenShotPath, amountOfExpander);
+                                    var error = OpenAllExpander(chrome, ScreenShotPath, amountOfExpander, parentId, repo);
+                                    if (!string.IsNullOrEmpty(error))
+                                    {
+                                        lastErrorCount++;
+                                    }
                                 }
                             }
-                            else lastErrorCount++;
+                            else
+                            {
+                                var item = new AutomationTestData()
+                                {
+                                    StartTime = DateTime.Now,
+                                    ParentId = parentId,
+                                    Error = sMessage,
+                                    ErrorLink = chrome.Url,
+                                    LocalImagePath = verify.FilePath,
+                                    IsLinkError = true
+                                };
+                                repo.AutomationTestDatas.Add(item);
+                                repo.SaveChanges();
+                                lastErrorCount++;
+                            }
                             if (n < MaxN)
                             {
-                                BackTracking(chrome, n + 1, MaxN, optionOpenExpander, ScreenShotPath, amountOfExpander);
+                                BackTracking(chrome, n + 1, MaxN, optionOpenExpander, ScreenShotPath, amountOfExpander, parentId, repo);
                             }
                         }
                     }
@@ -84,15 +106,16 @@
             element2.SendKeys(Pass);
             element3.Click();
             Thread.Sleep(5000);
-            return VerifyError(chrome, ScreenShotPath, 0);
+            var result = VerifyError(chrome, ScreenShotPath, 0);
+            return result != null ? result.Error : string.Empty;
         }
 
-        public static string OpenAllExpander(ChromeDriver chrome, string ScreenShotPath, int amountOfExpander)
+        public static string OpenAllExpander(ChromeDriver chrome, string ScreenShotPath, int amountOfExpander, long parentId, AlliancePos_DevEntities repo)
         {
             try
             {
                 ReadOnlyCollection<IWebElement> expanderList = chrome.FindElementsByCssSelector("i[class='fa fa-chevron-circle-down']");
-                return OpenExpander_Base(chrome, expanderList, ScreenShotPath, amountOfExpander);
+                return OpenExpander_Base(chrome, expanderList, ScreenShotPath, amountOfExpander, parentId, repo);
             }
             catch (Exception exception1)
             {
@@ -100,13 +123,13 @@
             }
         }
 
-        public static string OpenAllTabInPage(ChromeDriver chrome, int optionOpenExpander, string ScreenShotPath, int amountOfExpander)
+        public static string OpenAllTabInPage(ChromeDriver chrome, int optionOpenExpander, string ScreenShotPath, int amountOfExpander, long parentId, AlliancePos_DevEntities repo)
         {
             int maxN = 3;
-            return BackTracking(chrome, 1, maxN, optionOpenExpander, ScreenShotPath, amountOfExpander);
+            return BackTracking(chrome, 1, maxN, optionOpenExpander, ScreenShotPath, amountOfExpander, parentId, repo);
         }
 
-        public static string OpenExpander_Base(ChromeDriver chrome, ReadOnlyCollection<IWebElement> ExpanderList, string ScreenShotPath, int amountOfExpander)
+        public static string OpenExpander_Base(ChromeDriver chrome, ReadOnlyCollection<IWebElement> ExpanderList, string ScreenShotPath, int amountOfExpander, long parentId, AlliancePos_DevEntities repo)
         {
             string sMessage = string.Empty;
             if ((ExpanderList != null) && (ExpanderList.Count > 0))
@@ -133,10 +156,23 @@
                             Thread.Sleep(1000);
                             element.Click();
                             Thread.Sleep(5000);
-                            sMessage = VerifyError(chrome, ScreenShotPath, lastErrorCount);
+                            var verify = VerifyError(chrome, ScreenShotPath, lastErrorCount);
+                            sMessage = verify.Error;
                             if (!string.IsNullOrEmpty(sMessage))
                             {
                                 lastErrorCount++;
+                                var item = new AutomationTestData()
+                                {
+                                    StartTime = DateTime.Now,
+                                    ParentId = parentId,
+                                    ErrorLink = chrome.Url,
+                                    Error = sMessage,
+                                    LocalImagePath = verify.FilePath,
+                                    IsExpanderError = true
+                                };
+                                repo.AutomationTestDatas.Add(item);
+                                repo.SaveChanges();
+                                break;
                             }
                             element.Click();
                             Thread.Sleep(1000);
@@ -148,22 +184,30 @@
                     else break;
                 }
             }
+            else
+            {
+                sMessage = "NoExpander";
+            }
             return sMessage;
         }
 
-        public static void TakeScreenShot(ChromeDriver driver, string ScreenShotName, string ErrorName, string ScreenShotPath)
+        public static string TakeScreenShot(ChromeDriver driver, string ScreenShotName, string ErrorName, string ScreenShotPath)
         {
+            string filePath = string.Empty;
             if (!string.IsNullOrEmpty(ScreenShotPath))
             {
                 string path = Path.Combine(ScreenShotPath, ErrorName, ScreenShotName);
                 Directory.CreateDirectory(path);
-                driver.GetScreenshot().SaveAsFile(Path.Combine(path, ScreenShotName + ".jpg"));
+                filePath = Path.Combine(path, ScreenShotName + ".jpg");
+                driver.GetScreenshot().SaveAsFile(filePath);
                 Thread.Sleep(1000);
             }
+            return filePath;
         }
-        public static string VerifyError(ChromeDriver chrome, string ScreenShotPath, int lastErrorCount)
+        public static VerifyErrorModel VerifyError(ChromeDriver chrome, string ScreenShotPath, int lastErrorCount)
         {
-            string str = "";
+            var result = new VerifyErrorModel();
+            Dictionary<string, string> dict = new Dictionary<string, string>();
             try
             {
                 var attributes = chrome.FindElementsById("error_api");
@@ -173,12 +217,11 @@
                     if (attribute != "")
                     {
                         string screenShotName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        string[] textArray1 = new string[] { "Error_API: ", attribute, "\nScreenShot saved as: ", screenShotName, "\nLink: ", chrome.Url, "\n" };
-                        str = string.Concat(textArray1);
-                        TakeScreenShot(chrome, screenShotName, "Error", ScreenShotPath);
+                        result.Error = $"Error API: {attribute}";
+                        result.FilePath = TakeScreenShot(chrome, screenShotName, "Error", ScreenShotPath);
+
                     }
                 }
-                
             }
             catch
             {
@@ -192,9 +235,8 @@
                     if (attribute != "")
                     {
                         string screenShotName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        string[] textArray2 = new string[] { "Error_UI: ", attribute, "\nScreenShot saved as: ", screenShotName, "\nLink: ", chrome.Url, "\n" };
-                        str = string.Concat(textArray2);
-                        TakeScreenShot(chrome, screenShotName, "Error", ScreenShotPath);
+                        result.Error = $"Error UI: {attribute}";
+                        result.FilePath = TakeScreenShot(chrome, screenShotName, "Error", ScreenShotPath);
                     }
                 }
             }
@@ -203,14 +245,14 @@
             }
             try
             {
-                Thread.Sleep(0x3e8);
+                Thread.Sleep(1000);
                 chrome.FindElementById("btn-ls-close").Click();
-                Thread.Sleep(0x5dc);
+                Thread.Sleep(1000);
             }
             catch
             {
             }
-            return str;
+            return result;
         }
     }
 }

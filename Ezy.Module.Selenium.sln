@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezy.Module.Selenium.OpenInM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezy.Module.Selenium.Demo", "Ezy.Module.Selenium.Demo\Ezy.Module.Selenium.Demo.csproj", "{10C9FB4D-7245-41EC-B39E-3081220961B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezy.Module.Selenium.Core", "Ezy.Module.Selenium.Core\Ezy.Module.Selenium.Core.csproj", "{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{10C9FB4D-7245-41EC-B39E-3081220961B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10C9FB4D-7245-41EC-B39E-3081220961B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10C9FB4D-7245-41EC-B39E-3081220961B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{634DC2E1-D55E-4419-92C6-C84EAEE34FA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -146,14 +146,14 @@ namespace Ezy.Module.Selenium.OpenInMenu
                                     {
                                         lastErrorCount++;
                                     }
+                                    parent.LinkOpenCount = linkOpenCount;
+                                    repo.SaveChanges();
                                 }
                             }
                             element3.Click();
                             Thread.Sleep(5000);
                         }
                     }
-                    parent.LinkOpenCount = linkOpenCount;
-                    repo.SaveChanges();
                 }
                 return string.Empty;
             }
